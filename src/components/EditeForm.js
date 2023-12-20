@@ -1,5 +1,3 @@
-// EditForm.js
-
 import React from 'react';
 import { Formik, Form, Field, useFormik } from 'formik';
 import { TextField, Button, Typography, IconButton, Box, Grid } from '@mui/material';
@@ -7,26 +5,24 @@ import CloseIcon from '@mui/icons-material/Close';
 import { updateDoc, doc, collection } from "firebase/firestore";
 import Swal from 'sweetalert2';
 import { db } from './firebase.js';
-// import * as Yup from 'yup';
 import { validationSchema } from './validation/valid.js';
 
 function EditForm({ handleClose, updateTable, fid }) {
-
-
     const formik = useFormik({
         initialValues: {
-            name: fid.name,
-            course: fid.course,
-            year: fid.year,
+            teacherName: fid.teacherName,
+            courseName: fid.courseName,
+            courseNumber: fid.courseNumber,
+            description: fid.description,
         },
         validationSchema,
         onSubmit: async (values) => {
             try {
-                const { name, course, year } = values;
+                const { teacherName, courseName, courseNumber, description } = values;
                 const empCollectionRef = collection(db, "courses");
                 const courseDoc = doc(db, 'courses', fid.id);
-                await updateDoc(courseDoc, { name, course, year: Number(year) });
 
+                await updateDoc(courseDoc, { teacherName, courseName, courseNumber, description: Number(courseNumber) });
                 updateTable();
                 handleClose();
                 Swal.fire('Updated!', 'Your course has been updated', 'success');
@@ -36,43 +32,6 @@ function EditForm({ handleClose, updateTable, fid }) {
             }
         },
     });
-
-    const inputs = [
-        {
-            type: 'text',
-            name: 'name',
-            label: 'Name',
-        },
-        {
-            type: 'text',
-            name: 'course',
-            label: 'Course Name',
-        },
-        {
-            type: 'number',
-            name: 'year',
-            label: 'Year',
-        },
-    ];
-
-    const renderInputs = inputs.map((input, index) => (
-        <Grid item xs={12} key={index}>
-            <Field
-                type={input.type}
-                name={input.name}
-                label={input.label}
-                as={TextField}
-                variant="standard"
-                size="small"
-                sx={{ minWidth: '100%' }}
-                onChange={formik.handleChange}
-                value={formik.values[input.name]}
-                onBlur={formik.handleBlur}
-                error={formik.touched[input.name] && !!formik.errors[input.name]}
-                helperText={formik.touched[input.name] && formik.errors[input.name]}
-            />
-        </Grid>
-    ));
 
     return (
         <Box sx={{ m: 2 }}>
@@ -89,9 +48,52 @@ function EditForm({ handleClose, updateTable, fid }) {
             <Formik {...formik}>
                 <Form onSubmit={formik.handleSubmit}>
                     <Grid container spacing={2}>
-                        {renderInputs}
                         <Grid item xs={12}>
-                            <Typography variant='h5' align='center'>
+                            <TextField
+                                type="text"
+                                name="teacherName"
+                                label="Teacher Name"
+                                variant="standard"
+                                size="small"
+                                fullWidth
+                                {...formik.getFieldProps('teacherName')}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                type="text"
+                                name="courseName"
+                                label="Course Name"
+                                variant="standard"
+                                size="small"
+                                fullWidth
+                                {...formik.getFieldProps('courseName')}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                type="number"
+                                name="courseNumber"
+                                label="Course Number"
+                                variant="standard"
+                                size="small"
+                                fullWidth
+                                {...formik.getFieldProps('courseNumber')}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                type="text"
+                                name="description"
+                                label="Description"
+                                variant="standard"
+                                size="small"
+                                fullWidth
+                                {...formik.getFieldProps('description')}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Typography variant='h5' align='right'>
                                 <Button type="submit" variant='contained'>
                                     Submit
                                 </Button>

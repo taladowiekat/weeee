@@ -27,7 +27,7 @@ import Swal from 'sweetalert2';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import Modal from '@mui/material/Modal';
 import AddForm from './AddForm.js';
-import EditForm from './EditeForm.js'; // Corrected import
+import EditForm from './EditeForm.js';
 
 const style = {
     position: 'absolute',
@@ -103,17 +103,21 @@ export default function StickyHeadTable() {
             getUsers();
         }
     };
+    
 
-    const editData = (id, name, course, year) => {
+    const editData = (id, courseName, courseNumber, description, teacherName) => {
         const data = {
             id: id,
-            name: name,
-            course: course,
-            year: year
+            teacherName: teacherName,
+            courseName: courseName,
+            courseNumber: courseNumber,
+            description: description
         };
         setFormid(data);
         handleEditOpen();
     };
+    
+    
 
     const updateTable = () => {
         getUsers();
@@ -145,124 +149,134 @@ export default function StickyHeadTable() {
                 </Modal>
             </div>
 
-            
-                <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-                    <Typography
-                        gutterBottom
-                        variant='h5'
-                        component='div'
-                        sx={{ padding: "20px" }}
-                    ></Typography>
-                    <Divider />
 
-                    <Box height={10} />
-                    <Stack direction="row" spacing={2} className='my-2 mb-2'>
-                        <Autocomplete
-                            disablePortal
-                            id="combo-box-demo"
-                            options={rows}
-                            sx={{ width: 300 }}
-                            onChange={(e, v) => filterData(v)}
-                            getOptionLabel={(rows) => rows.name || ""}
-                            renderInput={(params) => (
-                                <TextField {...params} size="small" label="Search Courses" />
-                            )}
-                        />
+            <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+                <Typography
+                    gutterBottom
+                    variant='h5'
+                    component='div'
+                    sx={{ padding: "20px" }}
+                ></Typography>
+                <Divider />
 
-                        <Typography
-                            variant='h6'
-                            component="div"
-                            sx={{ flexGrow: 1 }}
-                        ></Typography>
-                        <Button variant="contained" endIcon={<AddCircleIcon />} onClick={handleOpen}>
-                            Add
-                        </Button>
-                    </Stack>
-
-                    <Box height={10} />
-                    <TableContainer sx={{ maxHeight: 440 }}>
-                        <Table stickyHeader aria-label="sticky table">
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell
-                                        align="left"
-                                        style={{ minWidth: "100px" }}
-                                    >
-                                        Name
-                                    </TableCell>
-                                    <TableCell
-                                        align="left"
-                                        style={{ minWidth: "100px" }}
-                                    >
-                                        Course Name
-                                    </TableCell>
-                                    <TableCell
-                                        align="left"
-                                        style={{ minWidth: "100px" }}
-                                    >
-                                        Year
-                                    </TableCell>
-                                    <TableCell
-                                        align="left"
-                                        style={{ minWidth: "100px" }}
-                                    >
-                                        Action
-                                    </TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {rows
-                                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                    .map((row) => (
-                                        <TableRow key={row.id} hover role="checkbox" tabIndex={-1}>
-                                            <TableCell align="left">
-                                                {row.name}
-                                            </TableCell>
-                                            <TableCell align="left">
-                                                {row.course}
-                                            </TableCell>
-                                            <TableCell align="left">
-                                                {row.year}
-                                            </TableCell>
-                                            <TableCell align="left">
-                                                <Stack spacing={2} direction="row">
-                                                    <EditIcon
-                                                        style={{
-                                                            fontSize: '20px',
-                                                            color: 'blue',
-                                                            cursor: 'pointer',
-                                                        }}
-                                                        className='cursor-pointer'
-                                                        onClick={() => { editData(row.id, row.name, row.course, row.year) }}
-                                                    />
-
-                                                    <DeleteIcon
-                                                        style={{
-                                                            fontSize: '20px',
-                                                            color: 'darkRed',
-                                                            cursor: 'pointer',
-                                                        }}
-                                                        className='cursor-pointer'
-                                                        onClick={() => deleteUser(row.id)}
-                                                    />
-                                                </Stack>
-                                            </TableCell>
-                                        </TableRow>
-                                    ))}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
-                    <TablePagination
-                        rowsPerPageOptions={[10, 25, 100]}
-                        component="div"
-                        count={rows.length}
-                        rowsPerPage={rowsPerPage}
-                        page={page}
-                        onPageChange={handleChangePage}
-                        onRowsPerPageChange={handleChangeRowsPerPage}
+                <Box height={10} />
+                <Stack direction="row" spacing={2} className='my-2 mb-2'>
+                    <Autocomplete
+                        disablePortal
+                        id="combo-box-demo"
+                        options={rows}
+                        sx={{ width: 300 }}
+                        onChange={(e, v) => filterData(v)}
+                        getOptionLabel={(rows) => rows.name || ""}
+                        renderInput={(params) => (
+                            <TextField {...params} size="small" label="Search Courses" />
+                        )}
                     />
-                </Paper>
-            
+
+                    <Typography
+                        variant='h6'
+                        component="div"
+                        sx={{ flexGrow: 1 }}
+                    ></Typography>
+                    <Button variant="contained" endIcon={<AddCircleIcon />} onClick={handleOpen}>
+                        Add
+                    </Button>
+                </Stack>
+
+                <Box height={10} />
+                <TableContainer sx={{ maxHeight: 440 }}>
+                    <Table stickyHeader aria-label="sticky table">
+                        <TableHead>
+                            <TableRow>
+                                <TableCell
+                                    align="left"
+                                    style={{ minWidth: "100px" }}
+                                >
+                                    Teacher name
+                                </TableCell>
+                                <TableCell
+                                    align="left"
+                                    style={{ minWidth: "100px" }}
+                                >
+                                    Course name
+                                </TableCell>
+                                <TableCell
+                                    align="left"
+                                    style={{ minWidth: "100px" }}
+                                >
+                                    Course number
+                                </TableCell>
+                                <TableCell
+                                    align="left"
+                                    style={{ minWidth: "100px" }}
+                                >
+                                    Description
+                                </TableCell>
+                                <TableCell
+                                    align="left"
+                                    style={{ minWidth: "100px" }}
+                                >
+                                    Action
+                                </TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                        {rows
+    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+    .map((row) => (
+        <TableRow key={row.id} hover role="checkbox" tabIndex={-1}>
+            <TableCell align="left">
+                {row.teacherName}
+            </TableCell>
+            <TableCell align="left">
+                {row.courseName}
+            </TableCell>
+            <TableCell align="left">
+                {row.courseNumber}
+            </TableCell>
+            <TableCell align="left">
+                {row.description}
+            </TableCell>
+            <TableCell align="left">
+                <Stack spacing={2} direction="row">
+                    <EditIcon
+                        style={{
+                            fontSize: '20px',
+                            color: 'blue',
+                            cursor: 'pointer',
+                        }}
+                        className='cursor-pointer'
+                        onClick={() => { editData(row.id, row.teacherName, row.courseName, row.courseNumber, row.description) }}
+                    />
+
+                    <DeleteIcon
+                        style={{
+                            fontSize: '20px',
+                            color: 'darkRed',
+                            cursor: 'pointer',
+                        }}
+                        className='cursor-pointer'
+                        onClick={() => deleteUser(row.id)}
+                    />
+                </Stack>
+            </TableCell>
+        </TableRow>
+    ))}
+
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+                <TablePagination
+                    rowsPerPageOptions={[10, 25, 100]}
+                    component="div"
+                    count={rows.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                />
+            </Paper>
+
         </>
     );
 }

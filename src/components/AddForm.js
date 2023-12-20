@@ -12,41 +12,47 @@ function AddForm({ handleClose, updateTable }) {
     
     const formik = useFormik({
         initialValues: {
-            name: '',
-            course: '',
-            year: 0,
+            teacherName: '',
+            courseName: '',
+            courseNumber: 0,
+            description: '',
         },
         validationSchema,
         onSubmit: async (values) => {
             try {
-                const { name, course, year } = values;
+                const { teacherName, courseName, courseNumber, description } = values;
                 const empCollectionRef = collection(db, "courses");
-                await addDoc(empCollectionRef, { name, course, year: Number(year) });
+                await addDoc(empCollectionRef, { teacherName, courseName, courseNumber, description: Number(courseNumber) });
                 updateTable();
                 handleClose();
-                Swal.fire('the course added!', 'Your course has been added', 'success');
+                Swal.fire('The course added!', 'Your course has been added', 'success');
             } catch (error) {
                 console.error("Error submitting form:", error);
                 Swal.fire('Error!', 'An error occurred while submitting the form', 'error');
             }
         },
     });
-
+    
     const inputs = [
         {
             type: 'text',
-            name: 'name',
-            label: 'Name',
+            name: 'teacherName',
+            label: 'Teacher Name',
         },
         {
             type: 'text',
-            name: 'course',
+            name: 'courseName',
             label: 'Course Name',
         },
         {
             type: 'number',
-            name: 'year',
-            label: 'Year',
+            name: 'courseNumber',
+            label: 'Course Number',
+        },
+        {
+            type: 'text',
+            name: 'description',
+            label: 'Description',
         },
     ];
 
@@ -80,12 +86,13 @@ function AddForm({ handleClose, updateTable }) {
             </IconButton>
 
             <Formik {...formik}>
-                <Form onSubmit={formik.handleSubmit}>
+    <Form onSubmit={formik.handleSubmit}>
+
                     <Grid container spacing={2}>
                         {renderInputs}
                         <Grid item xs={12}>
                             <Typography variant='h5' align='center'>
-                                <Button type="submit" variant='contained' disabled={!formik.dirty || !formik.isValid}>
+                                <Button type="submit" variant='contained'>
                                     Submit
                                 </Button>
                             </Typography>
